@@ -9,7 +9,7 @@ export default function Layout() {
           name="index" // This is the name of the page and must match the url from root
           options={{
             drawerLabel: 'Dashboard',
-            title: 'Dashboard',
+            title: '',
           }}
         />
         {/* <Drawer.Screen
