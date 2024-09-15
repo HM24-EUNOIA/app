@@ -1,43 +1,25 @@
+import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
 
+import { useColorScheme } from '@/hooks/useColorScheme';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-// Simulated auth function - to be implemented later
-// const checkAuth = async () => {
-//   // Simulate an API call or check local storage
-//   return new Promise((resolve) => {
-//     setTimeout(() => resolve(false), 1000);
-//   });
-// };
-
 export default function RootLayout() {
-  // const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
 
   useEffect(() => {
-    async function prepare() {
-      try {
-        // Authentication check removed for now
-        // const authStatus = await checkAuth();
-        // setIsAuthenticated(authStatus);
-      } catch (e) {
-        console.warn(e);
-      } finally {
-        if (loaded) {
-          await SplashScreen.hideAsync();
-        }
-      }
+    if (loaded) {
+      SplashScreen.hideAsync();
     }
-
-    prepare();
   }, [loaded]);
 
   if (!loaded) {
@@ -45,11 +27,11 @@ export default function RootLayout() {
   }
 
   return (
+    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
-        {/* Always render for now, regardless of auth status */}
-        <Stack.Screen name="(main)" options={{ headerShown: false }} />
-        {/* Auth screen commented out for now */}
-        {/* <Stack.Screen name="(auth)" options={{ headerShown: false }} /> */}
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="+not-found" />
       </Stack>
+    </ThemeProvider>
   );
 }
